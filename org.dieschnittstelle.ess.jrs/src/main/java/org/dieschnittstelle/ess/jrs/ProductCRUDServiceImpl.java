@@ -1,5 +1,6 @@
 package org.dieschnittstelle.ess.jrs;
 
+import org.dieschnittstelle.ess.entities.GenericCRUDExecutor;
 import org.dieschnittstelle.ess.entities.erp.IndividualisedProductItem;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class ProductCRUDServiceImpl implements IProductCRUDService {
 
 	@Override
 	public IndividualisedProductItem readProduct(long id) {
-		// TODO Auto-generated method stub
+		GenericCRUDExecutor exec = (GenericCRUDExecutor) getSer
 		return null;
 	}
 	

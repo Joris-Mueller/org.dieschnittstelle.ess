@@ -2,8 +2,13 @@ package org.dieschnittstelle.ess.basics;
 
 
 import org.dieschnittstelle.ess.basics.annotations.AnnotatedStockItemBuilder;
+import org.dieschnittstelle.ess.basics.annotations.DisplaysAs;
 import org.dieschnittstelle.ess.basics.annotations.StockItemProxyImpl;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+import static org.dieschnittstelle.ess.basics.reflection.ReflectedStockItemBuilder.getAccessorNameForField;
 import static org.dieschnittstelle.ess.utils.Utils.*;
 
 public class ShowAnnotations {
@@ -31,20 +36,28 @@ public class ShowAnnotations {
 	private static void showAttributes(Object instance) {
 		show("class is: " + instance.getClass());
 
+		Class cls = instance.getClass();
+
 		try {
-
-			// TODO BAS2: create a string representation of instance by iterating
-			//  over the object's attributes / fields as provided by its class
-			//  and reading out the attribute values. The string representation
-			//  will then be built from the field names and field values.
-			//  Note that only read-access to fields via getters or direct access
-			//  is required here.
-
-			// TODO BAS3: if the new @DisplayAs annotation is present on a field,
-			//  the string representation will not use the field's name, but the name
-			//  specified in the the annotation. Regardless of @DisplayAs being present
-			//  or not, the field's value will be included in the string representation.
-
+			String clsName = cls.getName();
+			String[] splitName = clsName.split("\\.");
+			String basicClassName = splitName[splitName.length - 1];
+			StringBuilder fieldVals = new StringBuilder();
+			for(Field f : cls.getDeclaredFields()){
+				String getterName = getAccessorNameForField("get", f.getName());
+				Method getter = cls.getDeclaredMethod(getterName);
+				String val = getter.invoke(instance).toString();
+				String attrName;
+				if(f.isAnnotationPresent(DisplaysAs.class)){
+					DisplaysAs annotation = f.getAnnotation(DisplaysAs.class);
+					attrName = annotation.value();
+				}else{
+					attrName = f.getName();
+				}
+				fieldVals.append(String.format(" %s:%s", attrName, val));
+			}
+			String docString = String.format("{%s%s}", basicClassName, fieldVals.toString());
+			System.out.println(docString);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
