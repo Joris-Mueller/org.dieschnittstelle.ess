@@ -1,0 +1,1 @@
+[{"id":1,"name":"Schusterjunge","price":0,"expirationAfterStocked":720,"productType":"ROLL"},{"id":3,"name":"Kirschplunder","price":0,"expirationAfterStocked":1080,"productType":"PASTRY"}]

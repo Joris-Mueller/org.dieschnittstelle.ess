@@ -1,5 +1,8 @@
 package org.dieschnittstelle.ess.jrs;
 
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import org.dieschnittstelle.ess.entities.erp.AbstractProduct;
 import org.dieschnittstelle.ess.entities.erp.IndividualisedProductItem;
 
 import java.util.List;
@@ -16,19 +19,29 @@ import java.util.List;
  */
 
 /*
- * TODO JRS3: aendern Sie Argument- und Rueckgabetypen der Methoden von IndividualisedProductItem auf AbstractProduct
+ * JRS3: aendern Sie Argument- und Rueckgabetypen der Methoden von IndividualisedProductItem auf AbstractProduct
  */
+@Path("/products")
+@Consumes(MediaType.APPLICATION_JSON)
+@Produces(MediaType.APPLICATION_JSON)
 public interface IProductCRUDService {
 
-	public IndividualisedProductItem createProduct(IndividualisedProductItem prod);
+	@POST
+	public AbstractProduct createProduct(AbstractProduct prod);
 
-	public List<IndividualisedProductItem> readAllProducts();
+	@GET
+	public List<AbstractProduct> readAllProducts();
 
-	public IndividualisedProductItem updateProduct(long id,
-												   IndividualisedProductItem update);
+	@PUT
+	@Path("/{tpId}")
+	public AbstractProduct updateProduct(@PathParam("tpId") long id,
+										 AbstractProduct update);
+	@DELETE
+	@Path("/{tpId}")
+	boolean deleteProduct(@PathParam("tpId") long id);
 
-	boolean deleteProduct(long id);
-
-	public IndividualisedProductItem readProduct(long id);
+	@GET
+	@Path("/{tpId}")
+	public AbstractProduct readProduct(@PathParam("tpId") long id);
 			
 }
